@@ -1,154 +1,202 @@
+/* ================= GOOGLE FONT ================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* ================= RESET DASAR ================= */
 * {
   box-sizing: border-box;
 }
 
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  background: #f2f2f2;
+  font-family: 'Poppins', sans-serif;
+  background: #F4F6F8;
+  color: #333;
 }
 
-header {
-  background: #2e7d32;
+/* ================= HEADER DESA ================= */
+.header-desa {
+  background: #1B5E20;
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
   padding: 15px;
-  text-align: center;
-  font-size: 18px;
 }
 
+.logo-desa {
+  width: 60px;
+  height: 60px;
+  background: white;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.judul-utama {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.judul-sub {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* ================= LAYOUT ================= */
 .container {
-  padding: 15px;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: auto;
+  padding: 15px;
 }
 
 .card {
   background: white;
   padding: 15px;
-  border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* TOMBOL */
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* ================= FORM ================= */
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ================= BUTTON ================= */
 button {
-  padding: 8px 12px;
+  padding: 8px 14px;
   margin: 4px 2px;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
-  border-radius: 4px;
   font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s ease;
 }
 
-.primary { background:#2e7d32; color:white; }
-.edit { background:#f9a825; }
-.delete { background:#c62828; color:white; }
-.print { background:#1565c0; color:white; }
-.pdf { background:#ef6c00; color:white; }
-
-/* INPUT */
-input, select {
-  padding: 8px;
-  margin: 6px 0 12px 0;
-  width: 100%;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+button:hover {
+  opacity: 0.9;
 }
 
-/* TABLE DESKTOP */
+button:active {
+  transform: scale(0.97);
+}
+
+.primary {
+  background: #2E7D32;
+  color: white;
+}
+
+.print {
+  background: #1565C0;
+  color: white;
+}
+
+.pdf {
+  background: #EF6C00;
+  color: white;
+}
+
+/* ================= STATUS BADGE ================= */
+.status-btn {
+  padding: 6px 10px;
+  border-radius: 20px;
+  color: white;
+  font-size: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.sudah {
+  background: #2E7D32;
+}
+
+.belum {
+  background: #C62828;
+}
+
+/* ================= TABEL ================= */
+.table-wrapper {
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  min-width: 600px;
 }
 
-th, td {
-  border: 1px solid #ccc;
+th,
+td {
+  border: 1px solid #ddd;
   padding: 8px;
-  text-align: left;
   font-size: 14px;
+  text-align: center;
 }
 
-.hidden { display:none; }
+th {
+  background: #f5f5f5;
+}
 
+/* ================= LOGIN BOX ================= */
 .login-box {
   max-width: 350px;
   margin: 60px auto;
-  background: white;
   padding: 20px;
-  border-radius: 8px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .error {
   color: red;
 }
 
-/* =========================
-   📱 RESPONSIVE MOBILE
-========================= */
-@media (max-width: 768px) {
-
-  header {
-    font-size: 16px;
-    padding: 12px;
-  }
-
-  .container {
-    padding: 10px;
-  }
-
-  button {
-    width: 100%;
-    margin: 5px 0;
-    font-size: 15px;
-  }
-
-  /* Tabel jadi kartu */
-  table, thead, tbody, th, td, tr {
-    display: block;
-    width: 100%;
-  }
-
-  thead {
-    display: none;
-  }
-
-  tr {
-    background: #fff;
-    margin-bottom: 12px;
-    border-radius: 6px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    padding: 10px;
-  }
-
-  td {
-    border: none;
-    padding: 6px 0;
-    font-size: 14px;
-  }
-
-  td::before {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 2px;
-    color: #2e7d32;
-  }
-
-  td:nth-child(1)::before { content: "Pilih"; }
-  td:nth-child(2)::before { content: "Nama"; }
-  td:nth-child(3)::before { content: "Kategori"; }
-  td:nth-child(4)::before { content: "Aksi"; }
+.hidden {
+  display: none;
 }
 
-/* =========================
-   💻 TABLET
-========================= */
-@media (min-width: 769px) and (max-width: 1024px) {
-  button {
-    font-size: 14px;
+/* ================= RESPONSIVE HP ================= */
+@media (max-width: 600px) {
+  .header-desa {
+    flex-direction: column;
+    text-align: center;
   }
 
-  th, td {
-    font-size: 13px;
+  .logo-desa {
+    width: 50px;
+    height: 50px;
+  }
+
+  .judul-utama {
+    font-size: 16px;
+  }
+
+  .judul-sub {
+    font-size: 12px;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 6px;
+  }
+
+  th,
+  td {
+    font-size: 12px;
+    padding: 6px;
   }
 }
