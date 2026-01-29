@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layanan MBG Desa</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Library PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<header>Layanan Pembagian MBG Desa</header>
+
+<div class="container">
+
+  <!-- LOGIN -->
+  <div id="loginPage" class="login-box">
+    <h3>Login Admin</h3>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button class="primary" onclick="login()">Login</button>
+    <p id="loginError" class="error"></p>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="hidden">
+    <div class="card">
+      <button class="primary" onclick="showForm()">+ Tambah Penerima</button>
+      <button onclick="showDusun(1)">Dusun 1</button>
+      <button onclick="showDusun(2)">Dusun 2</button>
+      <button onclick="showDusun(3)">Dusun 3</button>
+      <button onclick="showDusun(4)">Dusun 4</button>
+      <button onclick="showDusun(5)">Dusun 5</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <!-- FORM -->
+    <div id="formSection" class="card hidden">
+      <h3 id="formTitle">Tambah Penerima</h3>
+      <input type="hidden" id="editIndex">
+      <label>Nama</label>
+      <input type="text" id="nama">
+
+      <label>Dusun</label>
+      <select id="dusun">
+        <option>Dusun 1</option>
+        <option>Dusun 2</option>
+        <option>Dusun 3</option>
+        <option>Dusun 4</option>
+        <option>Dusun 5</option>
+      </select>
+
+      <label>Kategori</label>
+      <select id="kategori">
+        <option>Ibu Rumah Tangga</option>
+        <option>Lansia</option>
+        <option>Ibu Hamil</option>
+      </select>
+
+      <button class="primary" onclick="simpanData()">Simpan</button>
+      <button onclick="batalForm()">Batal</button>
+    </div>
+
+    <!-- DATA -->
+    <div id="dataSection" class="card hidden">
+      <h3 id="judulDusun"></h3>
+
+      <select onchange="filterKategori(this.value)">
+        <option value="Semua">Semua Kategori</option>
+        <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
+        <option value="Lansia">Lansia</option>
+        <option value="Ibu Hamil">Ibu Hamil</option>
+      </select>
+
+      <table>
+        <thead>
+          <tr>
+            <th>✓</th>
+            <th>Nama</th>
+            <th>Kategori</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tabelData"></tbody>
+      </table>
+
+      <button class="print" onclick="cetakData()">Cetak yang Dicentang</button>
+      <button class="pdf" onclick="downloadPDF()">Download PDF</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- JS -->
+<script src="script.js"></script>
+</body>
+</html>

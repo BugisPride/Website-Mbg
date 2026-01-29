@@ -1,0 +1,154 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f2f2f2;
+}
+
+header {
+  background: #2e7d32;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.container {
+  padding: 15px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+}
+
+/* TOMBOL */
+button {
+  padding: 8px 12px;
+  margin: 4px 2px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.primary { background:#2e7d32; color:white; }
+.edit { background:#f9a825; }
+.delete { background:#c62828; color:white; }
+.print { background:#1565c0; color:white; }
+.pdf { background:#ef6c00; color:white; }
+
+/* INPUT */
+input, select {
+  padding: 8px;
+  margin: 6px 0 12px 0;
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* TABLE DESKTOP */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.hidden { display:none; }
+
+.login-box {
+  max-width: 350px;
+  margin: 60px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.error {
+  color: red;
+}
+
+/* =========================
+   📱 RESPONSIVE MOBILE
+========================= */
+@media (max-width: 768px) {
+
+  header {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  button {
+    width: 100%;
+    margin: 5px 0;
+    font-size: 15px;
+  }
+
+  /* Tabel jadi kartu */
+  table, thead, tbody, th, td, tr {
+    display: block;
+    width: 100%;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    background: #fff;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    padding: 10px;
+  }
+
+  td {
+    border: none;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+
+  td::before {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 2px;
+    color: #2e7d32;
+  }
+
+  td:nth-child(1)::before { content: "Pilih"; }
+  td:nth-child(2)::before { content: "Nama"; }
+  td:nth-child(3)::before { content: "Kategori"; }
+  td:nth-child(4)::before { content: "Aksi"; }
+}
+
+/* =========================
+   💻 TABLET
+========================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+  button {
+    font-size: 14px;
+  }
+
+  th, td {
+    font-size: 13px;
+  }
+}
