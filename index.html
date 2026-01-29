@@ -3,17 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Layanan MBG Desa</title>
+  <title>Layanan Pembagian MBG Desa</title>
+
+  <!-- FONT MODERN -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
   <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- Library PDF -->
+  <!-- PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- EXCEL -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
-<header>Layanan Pembagian MBG Desa</header>
+<!-- HEADER DENGAN LOGO -->
+<header class="header-desa">
+  <img src="logo-desa.png" class="logo-desa">
+  <div class="judul-desa">
+    <div class="judul-utama">Layanan Pembagian MBG Desa</div>
+    <div class="judul-sub">Sistem Pendataan & Distribusi Bantuan</div>
+  </div>
+</header>
 
 <div class="container">
 
@@ -28,33 +40,27 @@
 
   <!-- DASHBOARD -->
   <div id="dashboard" class="hidden">
+
+    <!-- TOMBOL ATAS -->
     <div class="card">
-      <button class="primary" onclick="showForm()">+ Tambah Penerima</button>
-      <button onclick="showDusun(1)">Dusun 1</button>
-      <button onclick="showDusun(2)">Dusun 2</button>
-      <button onclick="showDusun(3)">Dusun 3</button>
-      <button onclick="showDusun(4)">Dusun 4</button>
-      <button onclick="showDusun(5)">Dusun 5</button>
+      <button class="primary" onclick="showForm()">+ Tambah Warga</button>
       <button onclick="logout()">Logout</button>
+      <button style="background:#c62828;color:white" onclick="resetSemuaData()">RESET SEMUA DATA</button>
     </div>
 
-    <!-- FORM -->
+    <!-- FORM TAMBAH -->
     <div id="formSection" class="card hidden">
-      <h3 id="formTitle">Tambah Penerima</h3>
-      <input type="hidden" id="editIndex">
-      <label>Nama</label>
-      <input type="text" id="nama">
+      <h3>Tambah Data Warga</h3>
+      <input type="text" id="nama" placeholder="Nama Warga">
 
-      <label>Dusun</label>
       <select id="dusun">
-        <option>Dusun 1</option>
-        <option>Dusun 2</option>
-        <option>Dusun 3</option>
-        <option>Dusun 4</option>
-        <option>Dusun 5</option>
+        <option>Bapres</option>
+        <option>Suka Maju</option>
+        <option>Harapan Jaya</option>
+        <option>Mekar Sari</option>
+        <option>Tunas Baru</option>
       </select>
 
-      <label>Kategori</label>
       <select id="kategori">
         <option>Ibu Rumah Tangga</option>
         <option>Lansia</option>
@@ -65,37 +71,52 @@
       <button onclick="batalForm()">Batal</button>
     </div>
 
-    <!-- DATA -->
-    <div id="dataSection" class="card hidden">
-      <h3 id="judulDusun"></h3>
+    <!-- IMPORT EXCEL -->
+    <div class="card">
+      <b>Import Data Warga (Excel)</b><br><br>
+      <input type="file" accept=".xlsx,.xls" onchange="importExcel(event)">
+    </div>
 
-      <select onchange="filterKategori(this.value)">
-        <option value="Semua">Semua Kategori</option>
-        <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
-        <option value="Lansia">Lansia</option>
-        <option value="Ibu Hamil">Ibu Hamil</option>
-      </select>
+    <!-- PENCARIAN -->
+    <div class="card">
+      <input type="text" id="searchNama" placeholder="Cari nama warga..." onkeyup="cariNama()">
+    </div>
 
+    <!-- REKAP -->
+    <div class="card">
+      <b>Rekap Penerimaan:</b><br>
+      ✅ Sudah menerima: <span id="rekapSudah">0</span><br>
+      ⏳ Belum menerima: <span id="rekapBelum">0</span><br>
+      👥 Total warga: <span id="rekapTotal">0</span>
+    </div>
+
+    <!-- TABEL DATA -->
+    <div class="card table-wrapper">
       <table>
         <thead>
           <tr>
-            <th>✓</th>
             <th>Nama</th>
+            <th>Dusun</th>
             <th>Kategori</th>
+            <th>Status</th>
             <th>Aksi</th>
           </tr>
         </thead>
         <tbody id="tabelData"></tbody>
       </table>
-
-      <button class="print" onclick="cetakData()">Cetak yang Dicentang</button>
-      <button class="pdf" onclick="downloadPDF()">Download PDF</button>
     </div>
-  </div>
 
+    <!-- EXPORT -->
+    <div class="card">
+      <button class="print" onclick="cetakPenerima()">🖨 Cetak Daftar</button>
+      <button class="pdf" onclick="downloadPDFPenerima()">📄 PDF Daftar</button>
+      <button class="pdf" onclick="downloadPDFHariIni()">📅 PDF Hari Ini</button>
+      <button class="pdf" onclick="downloadPDFRiwayat()">📚 PDF Semua Riwayat</button>
+    </div>
+
+  </div>
 </div>
 
-<!-- JS -->
 <script src="script.js"></script>
 </body>
 </html>
