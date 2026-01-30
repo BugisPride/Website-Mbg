@@ -1,23 +1,52 @@
+/* ================= KONFIGURASI ================= */
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "12345";
-let dataMBG = JSON.parse(localStorage.getItem("dataMBG")) || [];
 
-/* LOGIN */
+let dataMBG = JSON.parse(localStorage.getItem("dataMBG")) || [];
+let modeExport = "";
+
+/* ================= UTIL ================= */
+function simpanLocal() {
+  localStorage.setItem("dataMBG", JSON.stringify(dataMBG));
+}
+
+function getTanggalWaktu() {
+  const now = new Date();
+  return now.toLocaleDateString("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  }) + " — " +
+  now.toLocaleTimeString("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit"
+  }) + " WIB";
+}
+
+/* ================= LOGIN ================= */
 function login() {
   if (username.value === ADMIN_USER && password.value === ADMIN_PASS) {
     loginPage.classList.add("hidden");
     dashboard.classList.remove("hidden");
     cariNama();
-  } else loginError.textContent = "Login gagal!";
+  } else {
+    loginError.textContent = "Login gagal!";
+  }
 }
-function logout() { location.reload(); }
 
-/* FORM */
+function logout() {
+  popupPilihan.classList.add("hidden");
+  location.reload();
+}
+
+/* ================= FORM DATA ================= */
 function showForm() { formSection.classList.remove("hidden"); }
 function batalForm() { formSection.classList.add("hidden"); }
 
 function simpanData() {
   if (!nama.value) return alert("Nama belum diisi");
+
   dataMBG.push({
     nama: nama.value,
     dusun: dusun.value,
@@ -25,13 +54,14 @@ function simpanData() {
     terima: false,
     riwayat: []
   });
-  localStorage.setItem("dataMBG", JSON.stringify(dataMBG));
+
+  simpanLocal();
   nama.value = "";
   batalForm();
   cariNama();
 }
 
-/* CARI */
+/* ================= TABEL & REKAP ================= */
 function cariNama() {
   const keyword = searchNama.value.toLowerCase();
   tabelData.innerHTML = "";
@@ -39,31 +69,33 @@ function cariNama() {
   dataMBG.forEach((d, i) => {
     if (d.nama.toLowerCase().includes(keyword)) {
       tabelData.innerHTML += `
-      <tr>
-        <td>${d.nama}</td>
-        <td>${d.dusun}</td>
-        <td>${d.kategori}</td>
-        <td>
-          <button class="status-btn ${d.terima ? 'sudah' : 'belum'}" onclick="toggleTerima(${i})">
-            ${d.terima ? 'Sudah' : 'Belum'}
-          </button>
-        </td>
-        <td><button onclick="hapusData(${i})">Hapus</button></td>
-      </tr>`;
+        <tr>
+          <td>${d.nama}</td>
+          <td>${d.dusun}</td>
+          <td>${d.kategori}</td>
+          <td>
+            <button class="${d.terima ? 'status-sudah' : 'status-belum'}"
+              onclick="toggleTerima(${i})">
+              ${d.terima ? 'Sudah' : 'Belum'}
+            </button>
+          </td>
+          <td>
+            <button class="btn-hapus" onclick="hapusData(${i})">Hapus</button>
+          </td>
+        </tr>`;
     }
   });
 
   updateRekap();
 }
 
-/* REKAP */
 function updateRekap() {
-  rekapTotal.textContent = dataMBG.length;
   rekapSudah.textContent = dataMBG.filter(d => d.terima).length;
   rekapBelum.textContent = dataMBG.filter(d => !d.terima).length;
+  rekapTotal.textContent = dataMBG.length;
 }
 
-/* STATUS + RIWAYAT */
+/* ================= STATUS TERIMA ================= */
 function toggleTerima(i) {
   const hariIni = new Date().toLocaleDateString("id-ID");
   dataMBG[i].terima = !dataMBG[i].terima;
@@ -72,174 +104,130 @@ function toggleTerima(i) {
     dataMBG[i].riwayat.push(hariIni);
   }
 
-  localStorage.setItem("dataMBG", JSON.stringify(dataMBG));
+  simpanLocal();
   cariNama();
 }
 
-/* HAPUS */
+/* ================= HAPUS DATA ================= */
 function hapusData(i) {
   if (confirm("Hapus data ini?")) {
     dataMBG.splice(i, 1);
-    localStorage.setItem("dataMBG", JSON.stringify(dataMBG));
+    simpanLocal();
     cariNama();
   }
 }
 
-/* RESET */
 function resetSemuaData() {
-  if (confirm("Yakin ingin menghapus SEMUA data warga?")) {
+  if (confirm("Hapus SEMUA data warga?")) {
     localStorage.removeItem("dataMBG");
     dataMBG = [];
     cariNama();
   }
 }
 
-/* FORMAT WAKTU */
-function getTanggalWaktu() {
-  const now = new Date();
-  return now.toLocaleDateString("id-ID", { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) +
-    " — " +
-    now.toLocaleTimeString("id-ID", { hour: '2-digit', minute: '2-digit' }) + " WIB";
+/* ================= POPUP EXPORT ================= */
+function bukaPopup(mode) {
+  if (dashboard.classList.contains("hidden")) return;
+  modeExport = mode;
+  popupPilihan.classList.remove("hidden");
 }
 
-/* CETAK */
-function cetakPenerima() {
-  let isi = "<h2>Daftar Penerima MBG</h2><br>";
-  let grupDusun = {};
+function tutupPopup() {
+  popupPilihan.classList.add("hidden");
+}
 
-  dataMBG.filter(d => d.terima).forEach(d => {
-    if (!grupDusun[d.dusun]) grupDusun[d.dusun] = [];
-    grupDusun[d.dusun].push(`${d.nama} (${d.kategori})`);
-  });
+function prosesPilihan(p) {
+  tutupPopup();
 
-  for (const dusun in grupDusun) {
-    let nomor = 1;
-    isi += `<b>Dusun ${dusun}</b><br>`;
-    grupDusun[dusun].forEach(nama => {
-      isi += `${nomor}. ${nama}<br>`;
-      nomor++;
-    });
-    isi += "<br>";
+  if (modeExport === "pdf") {
+    if (p === 1) pdfFilter(d => d.terima, "SUDAH MENERIMA", "sudah-menerima.pdf");
+    if (p === 2) pdfFilter(d => !d.terima, "BELUM MENERIMA", "belum-menerima.pdf");
+    if (p === 3) pdfFilter(() => true, "SEMUA WARGA", "semua-warga.pdf");
   }
 
-  isi += "Dicetak pada: " + getTanggalWaktu();
-  isi += "<br>Tanda Tangan Petugas: ____________";
-
-  const w = window.open("");
-  w.document.write("<div style='font-family:Times New Roman'>" + isi + "</div>");
-  w.print();
+  if (modeExport === "cetak") {
+    window.print();
+  }
 }
 
-/* PDF SEMUA */
-async function downloadPDFPenerima() {
+/* ================= PDF RAPI ================= */
+function pdfFilter(filterFn, judul, fileName) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
+
+  doc.setFont("times", "bold");
+  doc.setFontSize(14);
+  doc.text("DAFTAR PENERIMAAN MBG DESA", 105, 15, { align: "center" });
+
+  doc.setFontSize(11);
   doc.setFont("times", "normal");
+  doc.text("Tanggal Cetak: " + getTanggalWaktu(), 105, 22, { align: "center" });
+
+  let y = 30;
+
+  if (judul === "SEMUA WARGA") {
+    y = buatBagianStatus(doc, "A. SUDAH MENERIMA MBG", d => d.terima, y);
+    y += 8;
+    buatBagianStatus(doc, "B. BELUM MENERIMA MBG", d => !d.terima, y);
+  } else {
+    buatPerDusunTabel(doc, dataMBG.filter(filterFn), y);
+  }
+
+  doc.save(fileName);
+}
+
+/* ================= BAGIAN STATUS ================= */
+function buatBagianStatus(doc, judulBagian, filterStatus, y) {
+  doc.setFont("times", "bold");
   doc.setFontSize(12);
+  doc.text(judulBagian, 15, y);
+  y += 6;
 
-  let y = 20;
-  doc.text("DAFTAR PENERIMA MBG", 105, 10, { align: "center" });
+  doc.setFont("times", "normal");
+  const dataFilter = dataMBG.filter(filterStatus);
 
-  let grupDusun = {};
-  dataMBG.filter(d => d.terima).forEach(d => {
-    if (!grupDusun[d.dusun]) grupDusun[d.dusun] = [];
-    grupDusun[d.dusun].push(`${d.nama} (${d.kategori})`);
+  return buatPerDusunTabel(doc, dataFilter, y);
+}
+
+/* ================= TABEL PER DUSUN ================= */
+function buatPerDusunTabel(doc, dataArray, y) {
+  const kelompokDusun = {};
+
+  dataArray.forEach(d => {
+    if (!kelompokDusun[d.dusun]) kelompokDusun[d.dusun] = [];
+    kelompokDusun[d.dusun].push(d);
   });
 
-  for (const dusun in grupDusun) {
-    let nomor = 1;
+  for (let dusun in kelompokDusun) {
     doc.setFont("times", "bold");
-    doc.text("Dusun " + dusun, 15, y); y += 7;
-    doc.setFont("times", "normal");
+    doc.text("Dusun " + dusun, 15, y);
+    y += 5;
 
-    grupDusun[dusun].forEach(nama => {
-      doc.text(`${nomor}. ${nama}`, 20, y);
-      y += 7; nomor++;
-      if (y > 270) { doc.addPage(); y = 20; }
-    });
-    y += 4;
-  }
-
-  doc.text("Dicetak pada: " + getTanggalWaktu(), 15, y + 5);
-  doc.save("daftar-penerima-mbg.pdf");
-}
-
-/* PDF HARI INI */
-async function downloadPDFHariIni() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  doc.setFont("times", "normal");
-  doc.setFontSize(12);
-
-  let y = 20;
-  const hariIni = new Date().toLocaleDateString("id-ID");
-  doc.text("DAFTAR PENERIMA MBG HARI INI", 105, 10, { align: "center" });
-
-  let grupDusun = {};
-  dataMBG.filter(d => d.riwayat.includes(hariIni)).forEach(d => {
-    if (!grupDusun[d.dusun]) grupDusun[d.dusun] = [];
-    grupDusun[d.dusun].push(`${d.nama} (${d.kategori})`);
-  });
-
-  for (const dusun in grupDusun) {
-    let nomor = 1;
     doc.setFont("times", "bold");
-    doc.text("Dusun " + dusun, 15, y); y += 7;
-    doc.setFont("times", "normal");
-
-    grupDusun[dusun].forEach(nama => {
-      doc.text(`${nomor}. ${nama}`, 20, y);
-      y += 7; nomor++;
-      if (y > 270) { doc.addPage(); y = 20; }
-    });
+    doc.text("No", 15, y);
+    doc.text("Nama Warga", 25, y);
+    doc.text("Kategori", 120, y);
+    y += 2;
+    doc.line(15, y, 195, y);
     y += 4;
-  }
 
-  doc.text("Dicetak pada: " + getTanggalWaktu(), 15, y + 5);
-  doc.save("penerima-hari-ini.pdf");
-}
+    doc.setFont("times", "normal");
+    let no = 1;
 
-/* PDF RIWAYAT */
-async function downloadPDFRiwayat() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  doc.setFont("times", "normal");
-  doc.setFontSize(12);
+    kelompokDusun[dusun].forEach(warga => {
+      doc.text(String(no++), 15, y);
+      doc.text(warga.nama, 25, y);
+      doc.text(warga.kategori, 120, y);
+      y += 6;
 
-  let y = 20;
-  doc.text("RIWAYAT PENERIMAAN MBG", 105, 10, { align: "center" });
-
-  dataMBG.forEach(d => {
-    if (d.riwayat.length > 0) {
-      doc.text(`${d.nama} (${d.kategori}) - ${d.dusun}`, 15, y); y += 6;
-      doc.text("Tanggal menerima: " + d.riwayat.join(", "), 20, y); y += 10;
-      if (y > 270) { doc.addPage(); y = 20; }
-    }
-  });
-
-  doc.save("riwayat-penerimaan-mbg.pdf");
-}
-
-/* IMPORT EXCEL */
-function importExcel(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const jsonData = XLSX.utils.sheet_to_json(sheet);
-
-    jsonData.forEach(row => {
-      if (row.Nama && row.Dusun && row.Kategori) {
-        dataMBG.push({ nama: row.Nama, dusun: row.Dusun, kategori: row.Kategori, terima: false, riwayat: [] });
+      if (y > 270) {
+        doc.addPage();
+        y = 20;
       }
     });
 
-    localStorage.setItem("dataMBG", JSON.stringify(dataMBG));
-    alert("Import berhasil!");
-    cariNama();
-  };
-  reader.readAsArrayBuffer(file);
+    y += 6;
+  }
+
+  return y;
 }
