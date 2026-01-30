@@ -1,7 +1,7 @@
-/* ================= GOOGLE FONT ================= */
+/* ================= FONT ================= */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-/* ================= RESET DASAR ================= */
+/* ================= RESET ================= */
 * {
   box-sizing: border-box;
 }
@@ -13,33 +13,24 @@ body {
   color: #333;
 }
 
-/* ================= HEADER DESA ================= */
+/* ================= HEADER ================= */
 .header-desa {
   background: #1B5E20;
-  color: white;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 15px;
   padding: 15px;
+  text-align: center;
 }
 
 .logo-desa {
   width: 60px;
   height: 60px;
-  background: white;
+  background: #fff;
   padding: 5px;
   border-radius: 8px;
-}
-
-.judul-utama {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.judul-sub {
-  font-size: 13px;
-  opacity: 0.9;
 }
 
 /* ================= LAYOUT ================= */
@@ -50,17 +41,11 @@ body {
 }
 
 .card {
-  background: white;
+  background: #fff;
   padding: 15px;
   margin-bottom: 15px;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
 /* ================= FORM ================= */
@@ -71,63 +56,35 @@ select {
   margin: 6px 0 12px;
   border-radius: 6px;
   border: 1px solid #ccc;
-  font-family: 'Poppins', sans-serif;
 }
 
-/* ================= BUTTON ================= */
+/* ================= BUTTON DASAR ================= */
 button {
   padding: 8px 14px;
   margin: 4px 2px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.3px;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s ease;
+  transition: 0.2s ease;
 }
 
 button:hover {
   opacity: 0.9;
 }
 
-button:active {
-  transform: scale(0.97);
-}
+/* VARIASI WARNA */
+.primary { background: #2E7D32; color: #fff; }
+.print   { background: #1565C0; color: #fff; }
+.pdf     { background: #EF6C00; color: #fff; }
+.batal   { background: #ccc; color: #000; }
 
-.primary {
-  background: #2E7D32;
-  color: white;
-}
+/* STATUS WARNA */
+.status-sudah { background: #2E7D32; color: #fff; }
+.status-belum { background: #C62828; color: #fff; }
+.btn-hapus    { background: #757575; color: #fff; }
 
-.print {
-  background: #1565C0;
-  color: white;
-}
-
-.pdf {
-  background: #EF6C00;
-  color: white;
-}
-
-/* ================= STATUS BADGE ================= */
-.status-btn {
-  padding: 6px 10px;
-  border-radius: 20px;
-  color: white;
-  font-size: 12px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-}
-
-.sudah {
-  background: #2E7D32;
-}
-
-.belum {
-  background: #C62828;
-}
-
-/* ================= TABEL ================= */
+/* ================= TABLE ================= */
 .table-wrapper {
   overflow-x: auto;
 }
@@ -135,68 +92,96 @@ button:active {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
-  min-width: 600px;
 }
 
-th,
-td {
+th, td {
   border: 1px solid #ddd;
   padding: 8px;
-  font-size: 14px;
   text-align: center;
+  font-size: 14px;
 }
 
 th {
   background: #f5f5f5;
 }
 
-/* ================= LOGIN BOX ================= */
-.login-box {
-  max-width: 350px;
-  margin: 60px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.error {
-  color: red;
-}
-
+/* ================= UTILITAS ================= */
 .hidden {
   display: none;
 }
 
-/* ================= RESPONSIVE HP ================= */
+/* ================= POPUP ================= */
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.popup-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 260px;
+}
+
+.popup-box button {
+  width: 100%;
+  margin: 6px 0;
+}
+
+/* FIX: popup tidak muncul kalau hidden */
+.popup.hidden {
+  display: none !important;
+}
+
+/* ================= RESPONSIVE MOBILE ================= */
 @media (max-width: 600px) {
-  .header-desa {
-    flex-direction: column;
-    text-align: center;
+
+  .table-wrapper {
+    overflow-x: visible;
   }
 
-  .logo-desa {
-    width: 50px;
-    height: 50px;
-  }
-
-  .judul-utama {
-    font-size: 16px;
-  }
-
-  .judul-sub {
-    font-size: 12px;
-  }
-
-  button {
-    width: 100%;
-    margin-bottom: 6px;
-  }
-
+  table,
+  thead,
+  tbody,
   th,
-  td {
-    font-size: 12px;
-    padding: 6px;
+  td,
+  tr {
+    display: block;
+    width: 100%;
   }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    background: #fff;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  td {
+    border: none;
+    text-align: left;
+  }
+
+  td::before {
+    font-weight: 600;
+    display: block;
+    color: #1B5E20;
+  }
+
+  td:nth-child(1)::before { content: "Nama"; }
+  td:nth-child(2)::before { content: "Dusun"; }
+  td:nth-child(3)::before { content: "Kategori"; }
+  td:nth-child(4)::before { content: "Status"; }
+  td:nth-child(5)::before { content: "Aksi"; }
 }
