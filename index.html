@@ -5,25 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Layanan Pembagian MBG Desa</title>
 
-  <!-- FONT MODERN -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <!-- EXCEL -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
-<!-- HEADER DENGAN LOGO -->
 <header class="header-desa">
   <img src="logo-desa.png" class="logo-desa">
-  <div class="judul-desa">
-    <div class="judul-utama">Layanan Pembagian MBG Desa</div>
-    <div class="judul-sub">Sistem Pendataan & Distribusi Bantuan</div>
+  <div>
+    <div>Layanan Pembagian MBG Desa</div>
+    <div>Sistem Pendataan & Distribusi Bantuan</div>
   </div>
 </header>
 
@@ -35,24 +29,21 @@
     <input type="text" id="username" placeholder="Username">
     <input type="password" id="password" placeholder="Password">
     <button class="primary" onclick="login()">Login</button>
-    <p id="loginError" class="error"></p>
+    <p id="loginError" style="color:red"></p>
   </div>
 
   <!-- DASHBOARD -->
   <div id="dashboard" class="hidden">
 
-    <!-- TOMBOL ATAS -->
     <div class="card">
       <button class="primary" onclick="showForm()">+ Tambah Warga</button>
       <button onclick="logout()">Logout</button>
       <button style="background:#c62828;color:white" onclick="resetSemuaData()">RESET SEMUA DATA</button>
     </div>
 
-    <!-- FORM TAMBAH -->
     <div id="formSection" class="card hidden">
       <h3>Tambah Data Warga</h3>
       <input type="text" id="nama" placeholder="Nama Warga">
-
       <select id="dusun">
         <option>Bapres</option>
         <option>Suka Maju</option>
@@ -60,29 +51,24 @@
         <option>Mekar Sari</option>
         <option>Tunas Baru</option>
       </select>
-
       <select id="kategori">
         <option>Ibu Rumah Tangga</option>
         <option>Lansia</option>
         <option>Ibu Hamil</option>
       </select>
-
       <button class="primary" onclick="simpanData()">Simpan</button>
       <button onclick="batalForm()">Batal</button>
     </div>
 
-    <!-- IMPORT EXCEL -->
     <div class="card">
       <b>Import Data Warga (Excel)</b><br><br>
       <input type="file" accept=".xlsx,.xls" onchange="importExcel(event)">
     </div>
 
-    <!-- PENCARIAN -->
     <div class="card">
       <input type="text" id="searchNama" placeholder="Cari nama warga..." onkeyup="cariNama()">
     </div>
 
-    <!-- REKAP -->
     <div class="card">
       <b>Rekap Penerimaan:</b><br>
       ✅ Sudah menerima: <span id="rekapSudah">0</span><br>
@@ -90,7 +76,6 @@
       👥 Total warga: <span id="rekapTotal">0</span>
     </div>
 
-    <!-- TABEL DATA -->
     <div class="card table-wrapper">
       <table>
         <thead>
@@ -106,14 +91,23 @@
       </table>
     </div>
 
-    <!-- EXPORT -->
     <div class="card">
-      <button class="print" onclick="cetakPenerima()">🖨 Cetak Daftar</button>
-      <button class="pdf" onclick="downloadPDFPenerima()">📄 PDF Daftar</button>
-      <button class="pdf" onclick="downloadPDFHariIni()">📅 PDF Hari Ini</button>
+      <button class="print" onclick="bukaPopup('cetak')">🖨 Cetak Data</button>
+      <button class="pdf" onclick="bukaPopup('pdf')">📄 Export PDF</button>
       <button class="pdf" onclick="downloadPDFRiwayat()">📚 PDF Semua Riwayat</button>
     </div>
 
+  </div>
+</div>
+
+<!-- POPUP -->
+<div id="popupPilihan" class="popup hidden">
+  <div class="popup-box">
+    <h3>Pilih Data</h3>
+    <button onclick="prosesPilihan(1)">Sudah Menerima</button>
+    <button onclick="prosesPilihan(2)">Belum Menerima</button>
+    <button onclick="prosesPilihan(3)">Semua Warga</button>
+    <button class="batal" onclick="tutupPopup()">Batal</button>
   </div>
 </div>
 
